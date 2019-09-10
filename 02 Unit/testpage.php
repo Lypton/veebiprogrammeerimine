@@ -1,5 +1,12 @@
 <?php
 	$userName = "Lypton";
+	$fullTimeNow = date("d.m.Y H:i:s");
+	$hourNow = date("H");
+	$partOfDay = "hägune aeg";
+
+	if($hourNow < 8){
+		$partOfDay = "hommik";
+	}
 
 ?>
 
@@ -38,10 +45,17 @@
 	<br><br>
 		<h3> Sotsiaalmeedia kontode loend:</h3>
 	<ul>
-		<li> <a href="https://www.instagram.com/kenetpaurmann"> Instagram - Kenet Paurmann</li>
-		<li> <a href="https://www.instagram.com/martentreimn"> Instagram - Märten Treimann</li>
+		<li> <a href="https://www.instagram.com/kenetpaurmann"> Instagram - Kenet Paurmann </a></li>
+		<li> <a href="https://www.instagram.com/martentreimn"> Instagram - Märten Treimann </a></li>
+		<li> <a href="https://www.instagram.com/janmortenk"> Instagram - Jan Morten Kivi </a></li>
+		
 	</ul>
 
+<hr>
+	<?php
+		echo "<p> Lehe avamise hetkel oli aeg: ".$fullTimeNow .", ".$partOfDay .".</p>";
+	?>
+</hr>
 
 </body>
 </html>
