@@ -111,9 +111,8 @@
 		//echo "Tavaline tekst.;
 		$weekDaysET = ["Esmaspäev", "Teisipäev", "Kolmapäev", "Neljapäev", "Reede", "Laupäev", "Pühapäev"];
 		$weekDayToday = date("N"); //esmaspäev = 1;
-		echo "Täna on ". $weekDaysET [$weekDayToday - 1]. "<br>";
-		echo "Echo katse.". "<br>";
-
+		echo $weekDaysET[$weekDayToday - 1]. "<br>";
+	
 		echo $randomImgHTML;
 		
 	?>
