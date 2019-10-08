@@ -2,6 +2,7 @@
   require("../../../config_vp2019.php");
   require("functions_main.php");
   require("functions_film.php");
+  require("functions_user.php");
   $database = "if19_kenet_pa_1";
 
   $notice = null;
@@ -112,6 +113,7 @@
 
     //kui kõik korras, siis salvestama
     if(empty($nameError) and empty($surnameError) and empty($birthMonthError) and empty($birthYearError) and empty($birthDayError) and empty($birthDateError) and empty($genderError) and empty($emailError) and empty($passwordError) and empty($confirmpasswordError)){
+      echo "Hakkan salvestama";
       $notice = signUp($name, $surname, $email, $gender, $birthDate, $_POST["password"]);
     }//kui kõik korras!!
   }//kui on nuppu vajutatud
@@ -125,6 +127,7 @@
 	<title>Katselise veebi uue kasutaja loomine</title>
   </head>
   <body>
+    
     <h1>Loo endale kasutajakonto</h1>
 	<p>See leht on valminud TLÜ õppetöö raames ja ei oma mingisugust, mõtestatud või muul moel väärtuslikku sisu.</p>
 	<hr>
@@ -193,6 +196,7 @@
 	  <input name="submitUserData" type="submit" value="Loo kasutaja"><span><?php echo $notice; ?></span>
 	</form>
 	<hr>
+  <p>Tagasi <a href="page.php">avalehele</a>!</p>
 		
   </body>
 </html>
