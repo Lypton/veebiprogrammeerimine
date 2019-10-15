@@ -2,7 +2,7 @@
 
 //Võtan kasutusele sessiooni
 session_start();
-var_dump($_SESSION);
+//var_dump($_SESSION);
 
 function signUp($name, $surname, $email, $gender, $birthDate, $password){
 	$notice = null;
@@ -23,9 +23,9 @@ function signUp($name, $surname, $email, $gender, $birthDate, $password){
 }
   function signIn($email, $password){
 	$notice = "";
-	$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
-	$stmt = $mysqli->prepare("SELECT password FROM vpusers WHERE email=?");
-	echo $mysqli->error;
+	$conn = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+	$stmt = $conn->prepare("SELECT password FROM vpusers WHERE email=?");
+	echo $conn->error;
 	$stmt->bind_param("s", $email);
 	$stmt->bind_result($passwordFromDb);
 	if($stmt->execute()){
@@ -35,8 +35,8 @@ function signUp($name, $surname, $email, $gender, $birthDate, $password){
 		if(password_verify($password, $passwordFromDb)){
 		  //kui salasõna klapib
 		  $stmt->close();
-		  $stmt = $mysqli->prepare("SELECT id, firstname, lastname FROM vpusers WHERE email=?");
-		  echo $mysqli->error;
+		  $stmt = $conn->prepare("SELECT id, firstname, lastname FROM vpusers WHERE email=?");
+		  echo $conn->error;
 		  $stmt->bind_param("s", $email);
 		  $stmt->bind_result($idFromDb, $firstnameFromDb, $lastnameFromDb);
 		  $stmt->execute();
@@ -50,7 +50,7 @@ function signUp($name, $surname, $email, $gender, $birthDate, $password){
 
 		  //loeme kasutajaprofiili
 		  $stmt->close();
-		  $stmt = $conn->prepare("SELECT bgcolor, txtcolor FROM vpusers WHERE userid=?");
+		  $stmt = $conn->prepare("SELECT bgcolor, txtcolor FROM vpuserprofiles WHERE userid = ?");
 		  echo $conn->error;
 		  $stmt->bind_param("i", $_SESSION["userId"]);
 		  $stmt->bind_result($bgColorFromDb, $txtColorFromDb);
@@ -65,8 +65,8 @@ function signUp($name, $surname, $email, $gender, $birthDate, $password){
 
 		  //kuna siirvuma teisele lehele, sulgeme andmebaasi ühendused
 		  $stmt->close();
-		  $mysqli->close();
-		  return $notice;
+		  $conn->close();
+		  
 		  //siirdume teisele lehele
 		  header("Location: home.php");
 		  //katkestame edasise tegevuse siin
@@ -83,7 +83,7 @@ function signUp($name, $surname, $email, $gender, $birthDate, $password){
 	}
 	
 	$stmt->close();
-	$mysqli->close();
+	$conn->close();
 	return $notice;
 	
   }//sisselogimine lõppeb
@@ -99,9 +99,20 @@ function signUp($name, $surname, $email, $gender, $birthDate, $password){
 	$stmt->execute();
 	if($stmt->fetch()){
 		//profiil juba olemas, uuendame
-		$notice = "Profiil olemas, ei salvestanud midagi!";
+		$stmt -> close();
+		$stmt = $conn -> prepare("UPDATE vpuserprofiles SET description = ?, bgcolor = ?, txtcolor = ? WHERE userid = ?");
+		echo $conn->error;
+		$stmt -> bind_param("sssi", $description, $bgColor, $txtColor, $_SESSION["userId"]);
+		if($stmt->execute()){
+			$notice = "Profiil on edukalt uuendatud!";
+			$_SESSION["bgColor"] = $bgColor;
+			$_SESSION["txtColor"] = $txtColor;
+		} else { 
+			$notice = "Profiili uuendamisel tekkis tõrge!" .$stmt->error;
+		}
+
 	} else {
-		//profiili pole, salvestame
+		//profiili pole, salvestame... KUI EI OLNUD VEEL OLEMAS: Profiili salvestab andmebaasi ning salvestus.
 		$stmt->close();
 		$stmt = $conn->prepare("INSERT INTO vpuserprofiles (userid, description, bgcolor, txtcolor) VALUES(?,?,?,?)");
 		echo $conn->error;
