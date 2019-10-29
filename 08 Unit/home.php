@@ -31,6 +31,7 @@
     <li><a href="userprofile.php">Kasutajaprofiil</a></li>
     <li><a href="messages.php">Sõnumid</a></li>
     <li><a href="changepassword.php">Vaheta parool</a></li>
+    <li><a href="picupload.php">Piltide üleslaadimine</a></li>
   </ul>
 
   
