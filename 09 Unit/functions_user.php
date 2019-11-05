@@ -144,7 +144,7 @@ function signUp($name, $surname, $email, $gender, $birthDate, $password){
 	return $notice;
   }
   	function changePassword(){
-  	$notice = null;
+  	$pwdnotice = null;
   	$conn = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
   	$stmt = $conn->prepare("SELECT password FROM vpusers WHERE userid=?");
   	echo $conn->error;
@@ -163,16 +163,16 @@ function signUp($name, $surname, $email, $gender, $birthDate, $password){
 		  echo $conn->error;
 		  $stmt->bind_param("si", $pwdHash,$_SESSION["userID"]);
 		  if($stmt->execute()){
-			$notice="Parool on edukalt muudetud.";
+			$pwdnotice="Parool on edukalt muudetud.";
 		  }
 		} else {
-		  $notice = "Sisestatud salasõna on vale!";
+		  $pwdnotice = "Sisestatud salasõna on vale!";
 		}
 	  } else {
-		$notice = "Teie kasutajat ei leitud!";  
+		$pwdnotice = "Teie kasutajat ei leitud!";  
 	  }
 	} else {
-	  $notice = "Parooli muutmisel tekkis tehniline viga!" .$stmt->error;
+	  $pwdnotice = "Parooli muutmisel tekkis tehniline viga!" .$stmt->error;
 	}
 	$stmt->close();
 	$conn->close();
